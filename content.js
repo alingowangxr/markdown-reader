@@ -99,11 +99,11 @@
         <div id="md-title">${escapeHtml(article.title)}</div>
 
         <div id="md-buttons">
-          <button id="md-obsidian" title="Save to Obsidian">Save</button>
-          <button id="md-copy">Copy</button>
+          <button id="md-obsidian" title="Save to Obsidian">Obsidian</button>
+          <button id="md-copy">Clipboard</button>
           <button id="md-download-zip" title="Download ZIP with Images">Export ZIP</button>
-          <button id="md-download" title="Export Markdown only">Markdown</button>
-          <button id="md-toggle">Preview</button>
+          <button id="md-download" title="Export Markdown only">Export MD</button>
+          <button id="md-toggle">Markdown</button>
           <button id="md-settings">Settings</button>
           <button id="md-close" title="Close Overlay">Close</button>
         </div>
@@ -112,9 +112,9 @@
           <div class="setting-group">
             <label>Appearance</label>
             <div class="theme-options">
-              <div class="theme-swatch active" data-theme="dark" title="Dark Mode" style="background: #1a1a1a; border: 1px solid #333;"></div>
-              <div class="theme-swatch" data-theme="sepia" title="Sepia" style="background: #f4ecd8; border: 1px solid #d3c7a1;"></div>
-              <div class="theme-swatch" data-theme="light" style="background: #fff; border: 1px solid #ddd;"></div>
+              <div class="theme-swatch active" data-theme="dark" title="Velvet Dark" style="background: #1a1b1e; border: 1px solid #2c2e33;"></div>
+              <div class="theme-swatch" data-theme="sepia" title="Paper Sepia" style="background: #fbfaf8; border: 1px solid #e8e6e1;"></div>
+              <div class="theme-swatch" data-theme="light" title="Soft Nordic" style="background: #f5f7f9; border: 1px solid #d1d5db;"></div>
             </div>
           </div>
           <div class="setting-group">
@@ -229,7 +229,7 @@
       await navigator.clipboard.writeText(markdown);
       const btn = overlay.querySelector("#md-copy");
       btn.textContent = "Copied";
-      setTimeout(() => { btn.textContent = "Copy"; }, 1200);
+      setTimeout(() => { btn.textContent = "Clipboard"; }, 1200);
     };
 
     overlay.querySelector("#md-download").onclick = (e) => {

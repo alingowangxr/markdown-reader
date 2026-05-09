@@ -1,33 +1,33 @@
 :root {
-  --md-bg: #111;
-  --md-text: #eee;
-  --md-toolbar-bg: #1b1b1b;
-  --md-border: #333;
-  --md-btn-bg: #2a2a2a;
-  --md-btn-hover: #3a3a3a;
-  --md-code-bg: #1d1d1d;
+  --md-bg: #1a1b1e;
+  --md-text: #d1d5db;
+  --md-toolbar-bg: #141517;
+  --md-border: #2c2e33;
+  --md-btn-bg: #25262b;
+  --md-btn-hover: #2c2e33;
+  --md-code-bg: #141517;
   --md-font-size: 18px;
   --md-line-height: 1.8;
 }
 
 #md-reader-overlay.theme-light {
-  --md-bg: #ffffff;
-  --md-text: #1a1a1a;
-  --md-toolbar-bg: #f5f5f5;
-  --md-border: #ddd;
-  --md-btn-bg: #e0e0e0;
-  --md-btn-hover: #d0d0d0;
-  --md-code-bg: #f8f8f8;
+  --md-bg: #f5f7f9;
+  --md-text: #111827;
+  --md-toolbar-bg: #ebedf0;
+  --md-border: #d1d5db;
+  --md-btn-bg: #e5e7eb;
+  --md-btn-hover: #d1d5db;
+  --md-code-bg: #ffffff;
 }
 
 #md-reader-overlay.theme-sepia {
-  --md-bg: #f4ecd8;
-  --md-text: #5b4636;
-  --md-toolbar-bg: #e8dfc4;
-  --md-border: #d3c7a1;
-  --md-btn-bg: #dfd4b8;
-  --md-btn-hover: #d2c5a4;
-  --md-code-bg: #efdec2;
+  --md-bg: #fbfaf8;
+  --md-text: #37352f;
+  --md-toolbar-bg: #f4f1ea;
+  --md-border: #e8e6e1;
+  --md-btn-bg: #eeebe5;
+  --md-btn-hover: #e4e1d9;
+  --md-code-bg: #f5f2ed;
 }
 
 #md-reader-overlay {
