@@ -47,7 +47,8 @@
 
 | 函式庫 | 授權協議 | 描述 |
 | :--- | :--- | :--- |
-| [Readability.js](https://github.com/mozilla/readability) | Apache 2.0 | 網頁正文內容提取 (Mozilla)。 |
+| [Defuddle](https://github.com/kepano/defuddle) | MIT | 增強型網頁內容提取與元數據清理。 |
+| [Readability.js](https://github.com/mozilla/readability) | Apache 2.0 | 網頁正文內容提取與備援機制 (Mozilla)。 |
 | [Turndown.js](https://github.com/mixmark-io/turndown) | MIT | HTML 轉換為 Markdown (Dom Christie)。 |
 | [Marked.js](https://github.com/markedjs/marked) | MIT | 高效能 Markdown 渲染。 |
 | [JSZip](https://github.com/Stuk/jszip) | MIT | 瀏覽器端 ZIP 打包。 |

@@ -3,9 +3,47 @@
     return;
   }
 
-  const article = new Readability(
-    document.cloneNode(true)
-  ).parse();
+  const parseArticle = () => {
+    let result = null;
+    try {
+      const options = {
+        url: window.location.href,
+        markdown: false,
+        useAsync: false
+      };
+      
+      const docClone = document.cloneNode(true);
+      const defuddleResult = new Defuddle(docClone, options).parse();
+      
+      if (defuddleResult && defuddleResult.content && (defuddleResult.wordCount === undefined || defuddleResult.wordCount >= 50)) {
+        console.info("[Markdown Reader] extractor: defuddle");
+        result = {
+          title: defuddleResult.title || document.title || "Untitled",
+          byline: defuddleResult.author || "Unknown",
+          content: defuddleResult.content,
+          excerpt: defuddleResult.description || "",
+          length: defuddleResult.content.length
+        };
+      } else {
+        console.warn("[Markdown Reader] Defuddle result too short or empty, falling back to Readability");
+      }
+    } catch (err) {
+      console.warn("[Markdown Reader] Defuddle failed, fallback to Readability", err);
+    }
+
+    if (!result) {
+      const readabilityResult = new Readability(document.cloneNode(true)).parse();
+      if (readabilityResult) {
+        console.info("[Markdown Reader] extractor: readability");
+        readabilityResult.title = readabilityResult.title || document.title || "Untitled";
+        result = readabilityResult;
+      }
+    }
+    
+    return result;
+  };
+
+  const article = parseArticle();
 
   if (!article) {
     alert("Unable to parse article.");
@@ -15,7 +53,7 @@
   // --- NEW: Fix Relative URLs to Absolute URLs ---
   const fixUrls = (html) => {
     const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = html;
+    tempDiv.innerHTML = html || "";
     
     // Fix Images
     tempDiv.querySelectorAll("img").forEach(img => {
@@ -56,7 +94,7 @@
 
   // Template Replacement Logic
   function processTemplate(template, isFilename = false) {
-    const fullTitle = article.title;
+    const fullTitle = article.title || "Untitled";
     const cleanTitle = fullTitle.replace(/[\\/:*?"<>|]/g, "_");
     const displayTitle = isFilename ? (cleanTitle.length > 20 ? cleanTitle.slice(0, 20) : cleanTitle) : fullTitle;
     
@@ -103,6 +141,7 @@
           <button id="md-copy">Clipboard</button>
           <button id="md-download-zip" title="Download ZIP with Images">Export ZIP</button>
           <button id="md-download" title="Export Markdown only">Export MD</button>
+          <button id="md-download-html" title="Export Clean HTML">Export HTML</button>
           <button id="md-toggle">Markdown</button>
           <button id="md-settings">Settings</button>
           <button id="md-close" title="Close Overlay">Close</button>
@@ -221,7 +260,12 @@
       e.stopPropagation();
       const fileName = processTemplate(fileTpl, true);
       const uri = `obsidian://new?file=${encodeURIComponent(fileName)}&content=${encodeURIComponent(markdown)}`;
-      window.location.href = uri;
+      const a = document.createElement("a");
+      a.href = uri;
+      a.style.display = "none";
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => a.remove(), 100);
     };
 
     overlay.querySelector("#md-copy").onclick = async (e) => {
@@ -240,6 +284,103 @@
       const a = document.createElement("a");
       a.href = url;
       a.download = fileName + ".md";
+      a.click();
+      URL.revokeObjectURL(url);
+    };
+
+    overlay.querySelector("#md-download-html").onclick = (e) => {
+      e.stopPropagation();
+      const fileName = processTemplate(fileTpl, true);
+      const title = article.title;
+      const author = article.byline || "Unknown";
+      const sourceUrl = window.location.href;
+      const domain = window.location.hostname.replace("www.", "");
+      const date = new Date().toLocaleDateString();
+
+      const htmlTemplate = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${escapeHtml(title)}</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #1a1a1a;
+      --meta: #666666;
+      --border: #eeeeee;
+      --accent: #007aff;
+      --code-bg: #f5f5f7;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1b1e;
+        --text: #d1d5db;
+        --meta: #9ca3af;
+        --border: #2c2e33;
+        --code-bg: #141517;
+      }
+    }
+    body {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      line-height: 1.8;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      word-wrap: break-word;
+    }
+    header {
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    h1 { font-size: 2.2em; line-height: 1.2; margin-bottom: 0.4em; }
+    .meta { font-size: 0.9em; color: var(--meta); }
+    .meta a { color: var(--accent); text-decoration: none; }
+    img { max-width: 100%; height: auto; border-radius: 8px; margin: 1.5em 0; }
+    pre { 
+      background: var(--code-bg); 
+      padding: 16px; 
+      border-radius: 12px; 
+      overflow-x: auto; 
+      border: 1px solid var(--border);
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 0.9em;
+    }
+    code { font-family: inherit; }
+    blockquote {
+      margin: 2em 0;
+      padding-left: 20px;
+      border-left: 4px solid var(--accent);
+      color: var(--meta);
+      font-style: italic;
+    }
+    a { color: var(--accent); }
+    hr { border: none; border-top: 1px solid var(--border); margin: 3em 0; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>${escapeHtml(title)}</h1>
+    <div class="meta">
+      By <strong>${escapeHtml(author)}</strong> | 
+      Source: <a href="${sourceUrl}" target="_blank">${escapeHtml(domain)}</a> | 
+      Date: ${date}
+    </div>
+  </header>
+  <article>
+    ${absoluteContent}
+  </article>
+</body>
+</html>`;
+
+      const blob = new Blob([htmlTemplate], { type: "text/html" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = fileName + ".html";
       a.click();
       URL.revokeObjectURL(url);
     };

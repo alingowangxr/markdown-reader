@@ -10,6 +10,7 @@ chrome.action.onClicked.addListener(async (tab) => {
     target: { tabId: tab.id },
     files: [
       "libs/jszip.min.js",
+      "libs/defuddle.js",
       "libs/Readability.js",
       "libs/turndown.js",
       "libs/marked.umd.min.js",

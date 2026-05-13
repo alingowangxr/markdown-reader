@@ -47,7 +47,8 @@ You can use the following placeholders in both **YAML** and **Filename** templat
 
 | Library | License | Description |
 | :--- | :--- | :--- |
-| [Readability.js](https://github.com/mozilla/readability) | Apache 2.0 | Article content extraction (Mozilla). |
+| [Defuddle](https://github.com/kepano/defuddle) | MIT | Enhanced article extraction and metadata cleanup. |
+| [Readability.js](https://github.com/mozilla/readability) | Apache 2.0 | Article content extraction with fallback (Mozilla). |
 | [Turndown.js](https://github.com/mixmark-io/turndown) | MIT | HTML to Markdown conversion (Dom Christie). |
 | [Marked.js](https://github.com/markedjs/marked) | MIT | High-speed Markdown rendering. |
 | [JSZip](https://github.com/Stuk/jszip) | MIT | In-browser ZIP generation. |
